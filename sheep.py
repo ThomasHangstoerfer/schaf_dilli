@@ -9,6 +9,9 @@ w = 10
 h = 10
 field = [[0 for x in range(w)]for y in range(h)]
 field[0][0] = 1
+#field[2][0] = 1
+#field[4][0] = 1
+#field[6][0] = 1
 
 screen = pygame.display.set_mode(size)
 
@@ -32,31 +35,33 @@ def showSpeed():
     font = pygame.font.SysFont("Monospaced", 39)
     text = font.render(" speed: %i" % x, True, (128, 0, 0))
 
-def drawGrass():
-    rect = pygame.Rect(3, 3, 50, 50)
-    pygame.draw.rect(screen, (0, 128, 0),  rect, 0)
 
-def drawField():
-    rect = pygame.Rect(3, 3, 50, 50)
-    if field[0][0] == 1:
+
+def drawBlock(x, y):
+    rect = pygame.Rect(x*50+3, y*50+3, 50-3, 50-3)
+    if field[x][y] == 1:
         pygame.draw.rect(screen, (118, 47, 50), rect, 0)
-    if field[0][0] == 0:
+    if field[x][y] == 0:
         pygame.draw.rect(screen, (0, 128, 0), rect, 0)
 
-#showSpeed()
-drawGrass()
 
-def beschleunige():
-    if speed[0]<0:
-        speed[0] = speed[0]-1
-    if speed[0]>0:
-        speed[0] = speed[0]+1
-    if speed[1]<0:
-        speed[1] = speed[1]-1
-    if speed[1]>0:
-        speed[1] = speed[1]+1
 
-    showSpeed()
+
+def drawField():
+    for zeile in range(10):
+        for spalte in range(10):
+            drawBlock(spalte, zeile)
+
+def drawSheep():
+    screen.blit(sheep, sheeprect)
+
+
+
+
+#showSpeed()w
+
+
+
 
 while True:
     clck.tick(40)
@@ -93,6 +98,6 @@ while True:
     drawField()
 
     screen.blit(wolf, wolfrect)
-    screen.blit(sheep, sheeprect)
+    drawSheep()
 
     pygame.display.flip()
