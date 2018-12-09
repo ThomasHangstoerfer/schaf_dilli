@@ -1,4 +1,4 @@
-import sys, pygame
+import sys, pygame, random
 pygame.init()
 
 size = width, height = 800, 600
@@ -17,7 +17,7 @@ screen = pygame.display.set_mode(size)
 
 wolf = pygame.image.load("wolf.png")
 wolfrect = wolf.get_rect()
-
+wolfrect.move_ip(450, 450)
 sheep = pygame.image.load("sheep.png")
 sheeprect = sheep.get_rect()
 
@@ -34,7 +34,6 @@ def showSpeed():
     x = abs(speed[0])
     font = pygame.font.SysFont("Monospaced", 39)
     text = font.render(" speed: %i" % x, True, (128, 0, 0))
-
 
 
 def drawBlock(x, y):
@@ -55,8 +54,17 @@ def drawField():
 def drawSheep():
     screen.blit(sheep, sheeprect)
 
-
-
+def moveWolf():
+    direction = random.choice(['right', 'left', 'up', 'down', 'sit'])
+    if direction == 'right' and wolfrect.x < 450:
+        wolfrect.move_ip(50, 0)
+    if direction == 'left' and wolfrect.x > 0:
+        wolfrect.move_ip(-50, 0)
+    if direction == 'up' and wolfrect.y > 0:
+        wolfrect.move_ip(0, -50)
+    if direction == 'down' and wolfrect.y < 450:
+        wolfrect.move_ip(0, 50)
+    print (direction)
 
 #showSpeed()w
 
@@ -68,21 +76,34 @@ while True:
     #print("ticks: %i" % ticks)
     for event in pygame.event.get():
         #print('event: ', event)
-        if event.type == pygame.QUIT: sys.exit()
+        if event.type == pygame.QUIT:
+            sys.exit()
         if event.type == pygame.KEYDOWN:
             print('KEYDOWN event.unicode = %s' % event.unicode)
             #print('KEYDOWN pygame.K_q = %s' % pygame.K_q)
             if event.key == pygame.K_q:
                 print('Q')
                 sys.exit()
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_LEFT and sheeprect.x > 0:
                 print('LEFT')
-            if event.key == pygame.K_RIGHT:
+                sheeprect.move_ip(-50, 0)
+            if event.key == pygame.K_RIGHT and sheeprect.x < 450:
                 print('RIGHT')
+                sheeprect.move_ip(50, 0)
+            if event.key == pygame.K_UP and sheeprect.y > 0:
+                print('UP')
+                sheeprect.move_ip(0, -50)
+            if event.key == pygame.K_DOWN and sheeprect.y < 450:
+                print('DOWN', sheeprect)
+                sheeprect.move_ip(0, 50)
 
-    #if pygame.time.get_ticks() - ticks > 50:
-    #ballrect = ballrect.move(speed)
-    #    ticks = pygame.time.get_ticks()
+            field[int(sheeprect.x / 50)][int(sheeprect.y / 50) ] = 1
+
+
+
+    if pygame.time.get_ticks() - ticks > 120:
+        moveWolf()
+        ticks = pygame.time.get_ticks()
 
     #if ballrect.left <= 0 or ballrect.right >= width:
     #    beschleunige()
@@ -101,3 +122,52 @@ while True:
     drawSheep()
 
     pygame.display.flip()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
